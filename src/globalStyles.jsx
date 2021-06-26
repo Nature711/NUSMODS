@@ -8,34 +8,8 @@ export const GlobalStyle = createGlobalStyle`
  } 
 `;
 
-export const Container = styled.div`
-  font-family: "Georgia";
-  z-index: 1;
-  width: 100%;
-  max-width: 1300px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 50px;
-  padding-left: 50px;
-`;
-
-export const DynamicButton = styled.button`
-  border-radius: 4px;
-  background: ${({ PinkBg }) => (PinkBg ? "#ff69b4" : "	#20b2aa")};
-  color: #fff;
-  padding: 12px 50px;
-  font-size: 20px;
-  border: none;
-  cursor: pointer;
-  transition: text-shadow 0.5s;
-  transition: font-size 0.5s;
-  &:hover {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
-    font-size: 22px;
-  }
-`;
-
 export const LightButton = styled.button`
+  margin: ${({ buttonmargin }) => (buttonmargin ? buttonmargin : "10px")};
   padding: 10px 20px;
   color: #fff;
   background: transparent;
@@ -46,6 +20,20 @@ export const LightButton = styled.button`
   &:hover {
     background: #fff;
     color: #00bfff;
+  }
+`;
+
+export const Input = styled.input`
+  width: ${({ inputwidth }) => (inputwidth ? inputwidth : "250px")};
+  margin: ${({ inputmargin }) => (inputmargin ? inputmargin : "10px")};
+  height: ${({ inputheight }) => (inputheight ? inputheight : "35px")};
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  font-size: 18px;
+  border: 1px solid #fff;
+  &::-webkit-input-placeholder {
+    opacity: 0.4;
   }
 `;
 

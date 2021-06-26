@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { LightButton } from "../globalStyles";
+import { LightButton, Input } from "../globalStyles";
 
 const FooterWrapper = styled.footer`
   background: linear-gradient(
@@ -32,19 +32,6 @@ const ContactInfo = styled.div`
   margin-right: 100px;
 `;
 
-const SubInput = styled.input`
-  border-radius: 2px;
-  outline: none;
-  border: none;
-  font-size: 18px;
-  border: 1px solid #fff;
-  height: 35px;
-  margin-right: 20px;
-  &::-webkit-input-placeholder {
-    opacity: 0.4;
-  }
-`;
-
 function Footer() {
   return (
     <FooterWrapper>
@@ -53,7 +40,7 @@ function Footer() {
         <p>All rights reversed</p>
       </MainInfo>
       <ContactInfo>
-        <SubInput placeholder="enter your email address" />
+        <Input placeholder="enter your email address" />
         <LightButton>{"Subscribe Now"}</LightButton>
       </ContactInfo>
     </FooterWrapper>
