@@ -1,73 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
-import { Input } from "../../globalStyles";
+import { Input, RoundButton } from "../../globalStyles";
+import ListItems from "./ListItems";
 
 const TaskWrapper = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const AddTask = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 15px;
-`;
-
-const AddButton = styled.button`
-  width: 25px;
-  height: 25px;
-  border: none;
-  outline: none;
-  border-radius: 50%;
-  transition: 0.3s linear 0.1s;
-  text-align: center;
-  font-size: large;
-  color: white;
-  background-color: hotpink;
-  &:hover {
-    transform: rotate(180deg);
-  }
-`;
-
-const ListContainer = styled.ul`
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
-const ListItem = styled.li`
-  color: white;
-  background-color: lightblue;
-  margin: 10px;
-  height: 40px;
-  border-radius: 5px;
-  width: 250px;
-  text-align: center;
-  &:hover {
-    border: 3px solid #fff;
-    transition: all 0.2s linear;
-    color: #663399;
-  }
+const Title = styled.h2`
+  color: blue;
+  font-family: Cambria;
+`;
+
+const AddTask = styled.form`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function UpcomingTasks() {
+  const [items, setItems] = useState([]);
+  const defaultInput = { text: "", key: "" };
+  const [currentItem, setCurrentItem] = useState(defaultInput);
+
+  const addItem = (e) => {
+    e.preventDefault();
+    if (currentItem.text !== "") {
+      const newItems = [...items, currentItem];
+      setItems(newItems);
+      setCurrentItem(defaultInput);
+    }
+  };
+
+  const handleInput = (e) => {
+    setCurrentItem({ text: e.target.value, key: Date.now() });
+  };
+
+  const deleteItem = (key) => {
+    const filteredItems = items.filter((item) => item.key !== key);
+    setItems(filteredItems);
+  };
+
   return (
     <TaskWrapper>
-      <AddTask>
-        <Input inputwidth="200px" inputheight="25px" placeholder="add a task" />
-        <AddButton>+</AddButton>
+      <Title>Upcoming Tasks</Title>
+      <AddTask onSubmit={addItem}>
+        <Input
+          placeholder="add a task"
+          value={currentItem.text}
+          onChange={handleInput}
+        />
+        <RoundButton type="submit">+</RoundButton>
       </AddTask>
-      <ListContainer>
-        <ListItem>item1</ListItem>
-        <ListItem>item2</ListItem>
-        <ListItem>item3</ListItem>
-      </ListContainer>
+      <ListItems items={items} deleteItem={deleteItem} />
     </TaskWrapper>
   );
 }

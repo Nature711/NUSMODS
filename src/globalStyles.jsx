@@ -23,6 +23,22 @@ export const LightButton = styled.button`
   }
 `;
 
+export const RoundButton = styled.button`
+  width: 25px;
+  height: 25px;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  transition: 0.3s linear 0.1s;
+  text-align: center;
+  font-size: large;
+  color: white;
+  background-color: hotpink;
+  &:hover {
+    transform: rotate(180deg);
+  }
+`;
+
 export const Input = styled.input`
   width: ${({ inputwidth }) => (inputwidth ? inputwidth : "250px")};
   margin: ${({ inputmargin }) => (inputmargin ? inputmargin : "10px")};

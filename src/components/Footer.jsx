@@ -23,6 +23,7 @@ const MainInfo = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 100px;
+  color: white;
 `;
 
 const ContactInfo = styled.div`
