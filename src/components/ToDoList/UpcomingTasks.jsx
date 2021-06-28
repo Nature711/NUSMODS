@@ -10,7 +10,7 @@ const TaskWrapper = styled.div`
 `;
 
 const Title = styled.h2`
-  color: blue;
+  color: #663399;
   font-family: Cambria;
 `;
 

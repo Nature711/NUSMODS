@@ -1,11 +1,16 @@
 import styled, { createGlobalStyle } from "styled-components/macro";
 
 export const GlobalStyle = createGlobalStyle`
-  body {
+ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
  } 
+ button {
+   :focus{
+     outline: none;
+   }
+ }
 `;
 
 export const LightButton = styled.button`
@@ -36,6 +41,21 @@ export const RoundButton = styled.button`
   background-color: hotpink;
   &:hover {
     transform: rotate(180deg);
+  }
+`;
+
+export const Button = styled.button`
+  margin: ${({ buttonmargin }) => (buttonmargin ? buttonmargin : "10px")};
+  width: ${({ buttonwidth }) => (buttonwidth ? buttonwidth : "100px")};
+  padding: 10px 10px;
+  color: #fff;
+  background: #e9967a;
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    color: #a52a2a;
   }
 `;
 

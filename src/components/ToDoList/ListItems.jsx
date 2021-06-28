@@ -18,9 +18,12 @@ const ItemWrapper = styled.div`
   align-items: center;
 `;
 
-const ListItem = styled.input`
+const ListItem = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
-  background-color: lightblue;
+  background-color: #ffa07a;
   margin: 10px;
   width: 250px;
   height: 40px;
@@ -29,9 +32,10 @@ const ListItem = styled.input`
   font-size: large;
   border: none;
   &:hover {
-    border: 3px solid #fff;
-    transition: all 0.2s linear;
-    color: blue;
+    transition: all 0.1s linear;
+    border: 2px solid #fff;
+    color: #800000;
+    font-weight: 900;
   }
 `;
 
@@ -40,7 +44,9 @@ function ListItems(props) {
   const listItems = items.map((item) => {
     return (
       <ItemWrapper key={item.key}>
-        <ListItem type="text" id={item.key} value={item.text} />
+        <ListItem>
+          <p>{item.text}</p>
+        </ListItem>
         <RoundButton
           onClick={() => {
             props.deleteItem(item.key);

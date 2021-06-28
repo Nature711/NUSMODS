@@ -1,19 +1,19 @@
 import React from "react";
 import styled from "styled-components/macro";
 import UpcomingTasks from "./ToDoList/UpcomingTasks";
-import Timetable from "./Timetable";
-import DailyInspiration from "./DailyInspiration";
+import Timetable from "./TimetableSection/Timetable";
+import DailyInspiration from "./SentenceForTheDay/DailyInspiration";
 
 const HomeWrapper = styled.div`
   height: 807px;
-  background-color: lightblue;
+
   display: flex;
 `;
 
 const Notification = styled.div`
+  background-color: #b0e0e6;
   height: 100%;
   width: 20%;
-  background-color: lightgreen;
 `;
 
 const MainContent = styled.div`
@@ -22,17 +22,16 @@ const MainContent = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const SentenceWrapper = styled.div`
   height: 15%;
   width: 100%;
-  background-color: lightpink;
+  background-color: #fff0f5;
 `;
 
 const TableWrapper = styled.div`
   height: 85%;
   width: 100%;
-  background-color: yellow;
+  background-color: #fffff0;
 `;
 
 function Home() {
