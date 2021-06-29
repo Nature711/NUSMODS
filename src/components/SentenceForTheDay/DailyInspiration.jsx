@@ -13,7 +13,7 @@ const QuoteWrapper = styled.div`
 `;
 
 const QuotoBlock = styled.div`
-  width: 90%;
+  width: 85%;
   height: 90px;
   text-align: right;
   font-size: 1.5em;
@@ -48,7 +48,7 @@ function DailyInspiration() {
 
   const OnShuffleQuotoClick = () => {
     const num = number + 1;
-    setNumber(num % 9);
+    setNumber(num % 9); //looping through a list of 10 quotos
     setQuoto(quotoList[num]);
   };
 
@@ -63,7 +63,7 @@ function DailyInspiration() {
     if (quoto == "") {
       setQuoto(quotoList[number]); //set to default if nothing is entered
     } else {
-      setQuoto(quoto);
+      setQuoto(quoto); //display the input quoto
     }
   };
 

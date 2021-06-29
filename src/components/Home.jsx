@@ -5,8 +5,7 @@ import Timetable from "./TimetableSection/Timetable";
 import DailyInspiration from "./SentenceForTheDay/DailyInspiration";
 
 const HomeWrapper = styled.div`
-  height: 807px;
-
+  height: 790px;
   display: flex;
 `;
 
