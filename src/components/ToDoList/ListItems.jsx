@@ -49,7 +49,7 @@ function ListItems(props) {
         </ListItem>
         <RoundButton
           onClick={() => {
-            props.deleteItem(item.key);
+            props.onDelete(item.key);
           }}
         >
           -

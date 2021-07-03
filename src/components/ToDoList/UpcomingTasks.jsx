@@ -38,7 +38,7 @@ function UpcomingTasks() {
     setCurrentItem({ text: e.target.value, key: Date.now() });
   };
 
-  const deleteItem = (key) => {
+  const handleDelete = (key) => {
     const filteredItems = items.filter((item) => item.key !== key);
     setItems(filteredItems);
   };
@@ -54,7 +54,7 @@ function UpcomingTasks() {
         />
         <RoundButton type="submit">+</RoundButton>
       </AddTask>
-      <ListItems items={items} deleteItem={deleteItem} />
+      <ListItems items={items} onDelete={handleDelete} />
     </TaskWrapper>
   );
 }

@@ -23,14 +23,14 @@ const Cell = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   font-size: 20px;
   font-weight: 900;
-  font-family: Cambria;
+  font-family: Arial;
   color: #808080;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const times = [
+export const times = [
   "0700",
   "0800",
   "0900",
@@ -53,10 +53,10 @@ const times = [
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const timeline = times.map((time) => <Cell>{time}</Cell>);
+const timeline = times.map((time) => <Cell key={time}>{time}</Cell>);
 
 export const timelineComponent = <TimeWrapper>{timeline}</TimeWrapper>;
 
-const dayline = days.map((day) => <Cell>{day}</Cell>);
+const dayline = days.map((day) => <Cell key={day}>{day}</Cell>);
 
 export const daylineComponent = <DayWrapper>{dayline}</DayWrapper>;

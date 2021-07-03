@@ -68,13 +68,13 @@ function NavBar() {
         <Title href="/">MY NUSMODS</Title>
       </LogoContainer>
       <Menu>
-        <MenuLink class="MenuLink" to="/">
+        <MenuLink className="MenuLink" to="/">
           Link1
         </MenuLink>
-        <MenuLink class="MenuLink" to="/">
+        <MenuLink className="MenuLink" to="/">
           Link2
         </MenuLink>
-        <MenuLink class="MenuLink" to="/">
+        <MenuLink className="MenuLink" to="/">
           Link3
         </MenuLink>
       </Menu>

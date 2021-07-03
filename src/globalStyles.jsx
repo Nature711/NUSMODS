@@ -38,7 +38,7 @@ export const RoundButton = styled.button`
   text-align: center;
   font-size: large;
   color: white;
-  background-color: hotpink;
+  background-color: ${({ color }) => (color ? color : "hotpink")};
   &:hover {
     transform: rotate(180deg);
   }
@@ -59,13 +59,20 @@ export const Button = styled.button`
   }
 `;
 
+export const SmallButton = styled.button`
+  width: ${({ buttonwidth }) => (buttonwidth ? buttonwidth : "10px")};
+  height: ${({ buttonwidth }) => (buttonwidth ? buttonwidth : "12px")};
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background-color: ${({ color }) => (color ? color : "red")};
+`;
+
 export const Input = styled.input`
   width: ${({ inputwidth }) => (inputwidth ? inputwidth : "250px")};
   margin: ${({ inputmargin }) => (inputmargin ? inputmargin : "10px")};
   height: ${({ inputheight }) => (inputheight ? inputheight : "35px")};
-  border-radius: 2px;
   outline: none;
-  border: none;
   font-size: 18px;
   border: 1px solid #fff;
   &::-webkit-input-placeholder {
