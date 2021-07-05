@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { daylineComponent, timelineComponent } from "./DaysAndTimes";
 import Courses from "./Courses";
-import { Button, SmallButton } from "../../globalStyles";
-import "./timetable.css";
+import { Button, RoundButton } from "../../globalStyles";
 import CourseList from "./CourseList";
+import ColorPalette from "./ColorPalette";
 
 const TableWrapper = styled.div`
   box-sizing: border-box;
@@ -48,6 +48,12 @@ const AddCourse = styled.div`
   align-items: center;
 `;
 
+const CourseInputAndButton = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CourseInput = styled.input`
   display: inline-block;
   width: 190px;
@@ -56,6 +62,18 @@ const CourseInput = styled.input`
   outline: 2px solid #6a5acd;
   font-size: 18px;
   border: 1px solid #fff;
+  &::-webkit-input-placeholder {
+    opacity: 0.6;
+    font-size: 12px;
+  }
+`;
+
+const PaletteWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100px;
 `;
 
 const Title = styled.h3`
@@ -65,48 +83,91 @@ const Title = styled.h3`
   font-family: Cambria;
 `;
 
-const ButtonWrapper = styled.div`
-  width: 200px;
-  height: 20px;
-  margin-top: 20px;
-  background-color: lightblue;
-  border: 1px solid transparent;
-  border-radius: 0.3em;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+const Tip = styled.div`
+  text-align: center;
+  font-size: small;
+  color: brown;
+  width: 210px;
 `;
 
 function Timetable() {
   const [adding, setAdding] = useState(false); //whether the add course button is clicked
   const [courseList, setCourseList] = useState([]);
-  const defaultInput = { mod: "", key: "" };
+  const defaultInput = { mod: "", key: "", color: "" };
   const [currentCourse, setCurrentCourse] = useState(defaultInput);
-
   const [color, setColor] = useState();
+  const [courseEntered, setCourseEntered] = useState(false); //whether the course is entered when the user is adding course
+  const [refresh, setRefresh] = useState(false); //to cause re-render on course button click
+  const [timeConfirmed, setTimeConfirmed] = useState(false);
 
+  const defaultState = Array(126).fill(0);
+  const [buttonState, setButtonState] = useState(defaultState);
+
+  const buttonArray = [];
+  for (let i = 0; i < 126; i++) {
+    buttonArray.push({ key: i, state: false, color: "" });
+  }
+  const [buttons, setButtons] = useState(buttonArray);
+
+  //functions controlling the course buttons in timetable
+  const handleClick = (key) => {
+    buttons[key].state = !buttons[key].state;
+    buttons[key].color = buttons[key].state ? color : "";
+    setButtons(buttons);
+    buttonState[key] === 0 ? (buttonState[key] = 1) : (buttonState[key] = 0);
+    setButtonState(buttonState);
+    setRefresh(!refresh);
+  };
+
+  //functions controlling the course list in functionality section
   const addCourse = (e) => {
     e.preventDefault();
     if (currentCourse.mod !== "") {
+      currentCourse.color = color;
       const newCourses = [...courseList, currentCourse];
       setCourseList(newCourses);
       setCurrentCourse(defaultInput);
     }
   };
 
-  const handleInput = (e) => {
-    setCurrentCourse({ mod: e.target.value, key: Date.now() });
-  };
+  const handleInput = (e) =>
+    setCurrentCourse({ mod: e.target.value, key: Date.now(), color: "" });
 
   const handleAdd = (e) => {
-    setAdding(!adding);
     addCourse(e);
+    //cleanups
+    setAdding(!adding);
+    setColor("");
+    setCourseEntered(false);
+    setTimeConfirmed(false);
+    setButtonState(defaultState);
   };
 
   const handleDelete = (key) => {
     const filteredCourseList = courseList.filter((item) => item.key !== key);
     setCourseList(filteredCourseList);
   };
+
+  const handleSetCourse = () => setCourseEntered(true);
+
+  const handleSetColor = (color) => {
+    setColor(color);
+  };
+
+  const handleConfirm = () => {
+    setTimeConfirmed(true);
+  };
+
+  const canConfirmEnterCourse = currentCourse.mod !== "";
+
+  const colorSelected = color !== "";
+
+  const canSelectTime =
+    adding && courseEntered && colorSelected && !timeConfirmed;
+
+  const canConfirm = buttonState.reduce((a, b) => a + b, 0) !== 0; //hasNetChange
+
+  const showAddCourseButton = !adding || (adding && timeConfirmed);
 
   return (
     <TableWrapper>
@@ -115,49 +176,57 @@ function Timetable() {
         <Component>{timelineComponent}</Component>
         <Component>{daylineComponent}</Component>
         <Component>
-          <Courses canAdd={adding} color={color} />
+          <Courses
+            canSelect={canSelectTime}
+            allCourses={buttons}
+            onClick={handleClick}
+            hoverColor={color}
+          />
         </Component>
       </TimeTableWrapper>
       <Functionalities>
         <AddCourse>
-          <Button type="submit" buttonwidth="200px" onClick={handleAdd}>
-            {adding ? "Confirm" : "Add course"}
-          </Button>
+          {showAddCourseButton ? (
+            <Button type="submit" buttonwidth="200px" onClick={handleAdd}>
+              {adding ? "View courses" : "Add a course"}
+            </Button>
+          ) : null}
           {adding ? (
             <>
-              <ButtonWrapper>
-                <SmallButton color="red" onClick={() => setColor("red")} />
-                <SmallButton
-                  color="orange"
-                  onClick={() => setColor("orange")}
-                />
-                <SmallButton
-                  color="yellow"
-                  onClick={() => setColor("yellow")}
-                />
-                <SmallButton color="green" onClick={() => setColor("green")} />
-                <SmallButton color="blue" onClick={() => setColor("blue")} />
-                <SmallButton
-                  color="indigo"
-                  onClick={() => setColor("indigo")}
-                />
-                <SmallButton
-                  color="violet"
-                  onClick={() => setColor("violet")}
-                />
-              </ButtonWrapper>
-              <div className="tooltip">
-                <CourseInput value={currentCourse.mod} onChange={handleInput} />
-                <ol className="tooltiptext">
-                  <li>Enter the module code</li>
-                  <li>Select the timeslot</li>
-                  <li>Customize the timeslot display using color palette</li>
-                </ol>
-              </div>
+              {courseEntered ? (
+                timeConfirmed ? null : colorSelected ? (
+                  <Button onClick={handleConfirm} disabled={!canConfirm}>
+                    Confirm
+                  </Button>
+                ) : (
+                  <PaletteWrapper>
+                    <ColorPalette onClick={handleSetColor} />
+                    <Tip>
+                      choose a color for timeslot display and then select the
+                      timeslot in the table
+                    </Tip>
+                  </PaletteWrapper>
+                )
+              ) : (
+                <CourseInputAndButton>
+                  <CourseInput
+                    placeholder="Enter module code, e.g. GER1000"
+                    value={currentCourse.mod}
+                    onChange={handleInput}
+                  />
+                  <RoundButton
+                    onClick={handleSetCourse}
+                    color="lightblue"
+                    disabled={!canConfirmEnterCourse}
+                  >
+                    ✔
+                  </RoundButton>
+                </CourseInputAndButton>
+              )}
             </>
           ) : (
             <>
-              <Title>My Courses</Title>
+              {courseList == "" ? null : <Title>My Courses</Title>}
               <CourseList items={courseList} onDelete={handleDelete} />
             </>
           )}

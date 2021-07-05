@@ -29,8 +29,8 @@ export const LightButton = styled.button`
 `;
 
 export const RoundButton = styled.button`
-  width: 25px;
-  height: 25px;
+  width: ${({ width }) => (width ? width : "25px")};
+  height: ${({ height }) => (height ? height : "25px")};
   border: none;
   outline: none;
   border-radius: 50%;
@@ -40,7 +40,7 @@ export const RoundButton = styled.button`
   color: white;
   background-color: ${({ color }) => (color ? color : "hotpink")};
   &:hover {
-    transform: rotate(180deg);
+    ${({ rotate }) => (rotate ? "transform: rotate(180deg)" : null)};
   }
 `;
 
@@ -61,11 +61,18 @@ export const Button = styled.button`
 
 export const SmallButton = styled.button`
   width: ${({ buttonwidth }) => (buttonwidth ? buttonwidth : "10px")};
-  height: ${({ buttonwidth }) => (buttonwidth ? buttonwidth : "12px")};
+  height: ${({ buttonheight }) => (buttonheight ? buttonheight : "10px")};
   border: none;
   outline: none;
   border-radius: 50%;
   background-color: ${({ color }) => (color ? color : "red")};
+  &:hover {
+    width: ${({ buttonwidth }) => (buttonwidth ? buttonwidth + 5 : "15px")};
+    height: ${({ buttonheight }) => (buttonheight ? buttonheight + 5 : "15px")};
+  }
+  &:focus {
+    outline: 2px solid black;
+  }
 `;
 
 export const Input = styled.input`

@@ -47,11 +47,7 @@ function ListItems(props) {
         <ListItem>
           <p>{item.text}</p>
         </ListItem>
-        <RoundButton
-          onClick={() => {
-            props.onDelete(item.key);
-          }}
-        >
+        <RoundButton onClick={() => props.onDelete(item.key)} rotate={false}>
           -
         </RoundButton>
       </ItemWrapper>

@@ -60,7 +60,7 @@ function DailyInspiration() {
   const OnConfirmClick = () => {
     setConfirmClick(!confirmClick);
     setCustomClick(!customClick);
-    if (quoto == "") {
+    if (quoto === "") {
       setQuoto(quotoList[number]); //set to default if nothing is entered
     } else {
       setQuoto(quoto); //display the input quoto

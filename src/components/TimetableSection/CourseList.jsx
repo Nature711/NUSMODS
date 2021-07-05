@@ -27,9 +27,25 @@ const ListItem = styled.div`
   width: 150px;
   height: 40px;
   border-radius: 5px;
-  text-align: center;
   font-size: large;
   border: none;
+`;
+
+const Color = styled.div`
+  margin-left: 10px;
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Mod = styled.div`
+  width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function CourseList(props) {
@@ -37,15 +53,17 @@ function CourseList(props) {
   const listItems = items.map((item) => {
     return (
       <Wrapper>
-        <CourseWrapper>
-          <ListItem key={item.key}>
-            <p>{item.mod}</p>
+        <CourseWrapper key={item.key}>
+          <ListItem>
+            <Color>
+              <RoundButton color={item.color} width="20px" height="20px" />
+            </Color>
+            <Mod>{item.mod}</Mod>
           </ListItem>
           <RoundButton
             color="thistle"
-            onClick={() => {
-              props.onDelete(item.key);
-            }}
+            onClick={() => props.onDelete(item.key)}
+            rotate={false}
           >
             -
           </RoundButton>
