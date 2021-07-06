@@ -93,58 +93,83 @@ const Tip = styled.div`
 function Timetable() {
   const [adding, setAdding] = useState(false); //whether the add course button is clicked
   const [courseList, setCourseList] = useState([]);
-  const defaultInput = { mod: "", key: "", color: "" };
+  const defaultInput = { mod: "", key: "", color: "", times: "" };
   const [currentCourse, setCurrentCourse] = useState(defaultInput);
   const [color, setColor] = useState();
   const [courseEntered, setCourseEntered] = useState(false); //whether the course is entered when the user is adding course
   const [refresh, setRefresh] = useState(false); //to cause re-render on course button click
   const [timeConfirmed, setTimeConfirmed] = useState(false);
 
-  const defaultState = Array(126).fill(0);
-  const [buttonState, setButtonState] = useState(defaultState);
-
   const buttonArray = [];
   for (let i = 0; i < 126; i++) {
-    buttonArray.push({ key: i, state: false, color: "" });
+    buttonArray.push({
+      key: i,
+      state: false,
+      color: "",
+      isUsed: false,
+    });
   }
   const [buttons, setButtons] = useState(buttonArray);
 
+  const defaultButtonStateArray = Array(126).fill(0);
+  const [buttonState, setButtonState] = useState(defaultButtonStateArray);
+
   //functions controlling the course buttons in timetable
   const handleClick = (key) => {
-    buttons[key].state = !buttons[key].state;
-    buttons[key].color = buttons[key].state ? color : "";
-    setButtons(buttons);
-    buttonState[key] === 0 ? (buttonState[key] = 1) : (buttonState[key] = 0);
-    setButtonState(buttonState);
-    setRefresh(!refresh);
+    if (buttons[key].isUsed) {
+      alert("Can't select a slot that has already been occupied");
+    } else {
+      buttons[key].state = !buttons[key].state;
+      buttons[key].color = buttons[key].state ? color : "";
+      buttonState[key] == 0 ? (buttonState[key] = 1) : (buttonState[key] = 0);
+      setButtonState(buttonState);
+      setButtons(buttons);
+      setRefresh(!refresh);
+    }
   };
 
   //functions controlling the course list in functionality section
-  const addCourse = (e) => {
-    e.preventDefault();
+  const addCourse = () => {
     if (currentCourse.mod !== "") {
       currentCourse.color = color;
+      currentCourse.times = [];
+      for (let i = 0; i < 126; i++) {
+        if (buttonState[i] == 1) {
+          currentCourse.times.push(i);
+        }
+      } //relating course and time
       const newCourses = [...courseList, currentCourse];
       setCourseList(newCourses);
-      setCurrentCourse(defaultInput);
+      setTimeConfirmed(true);
+      for (let i = 0; i < 126; i++) {
+        if (buttons[i].state) {
+          buttons[i].isUsed = true;
+        }
+      } //update button state used
     }
   };
 
   const handleInput = (e) =>
     setCurrentCourse({ mod: e.target.value, key: Date.now(), color: "" });
 
-  const handleAdd = (e) => {
-    addCourse(e);
-    //cleanups
+  const handleSubmit = (e) => {
+    e.preventDefault();
     setAdding(!adding);
     setColor("");
     setCourseEntered(false);
     setTimeConfirmed(false);
-    setButtonState(defaultState);
+    setCurrentCourse(defaultInput);
+    setButtonState(defaultButtonStateArray);
   };
 
   const handleDelete = (key) => {
-    const filteredCourseList = courseList.filter((item) => item.key !== key);
+    const courseToDelete = courseList.filter((item) => item.key === key)[0];
+    for (const x of courseToDelete.times) {
+      buttons[x].state = false;
+      buttons[x].color = "";
+      buttons[x].isUsed = false;
+    }
+    const filteredCourseList = courseList.filter((item) => item.key !== key); //remove the selected course from course list
     setCourseList(filteredCourseList);
   };
 
@@ -154,10 +179,6 @@ function Timetable() {
     setColor(color);
   };
 
-  const handleConfirm = () => {
-    setTimeConfirmed(true);
-  };
-
   const canConfirmEnterCourse = currentCourse.mod !== "";
 
   const colorSelected = color !== "";
@@ -165,7 +186,7 @@ function Timetable() {
   const canSelectTime =
     adding && courseEntered && colorSelected && !timeConfirmed;
 
-  const canConfirm = buttonState.reduce((a, b) => a + b, 0) !== 0; //hasNetChange
+  const canConfirm = buttonState.reduce((a, b) => a + b, 0) !== 0;
 
   const showAddCourseButton = !adding || (adding && timeConfirmed);
 
@@ -187,7 +208,7 @@ function Timetable() {
       <Functionalities>
         <AddCourse>
           {showAddCourseButton ? (
-            <Button type="submit" buttonwidth="200px" onClick={handleAdd}>
+            <Button type="submit" buttonwidth="200px" onClick={handleSubmit}>
               {adding ? "View courses" : "Add a course"}
             </Button>
           ) : null}
@@ -195,7 +216,7 @@ function Timetable() {
             <>
               {courseEntered ? (
                 timeConfirmed ? null : colorSelected ? (
-                  <Button onClick={handleConfirm} disabled={!canConfirm}>
+                  <Button onClick={addCourse} disabled={!canConfirm}>
                     Confirm
                   </Button>
                 ) : (
@@ -217,6 +238,7 @@ function Timetable() {
                   <RoundButton
                     onClick={handleSetCourse}
                     color="lightblue"
+                    rotate="false"
                     disabled={!canConfirmEnterCourse}
                   >
                     ✔

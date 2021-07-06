@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { Button, Input } from "../../globalStyles";
-import { quotoList } from "./Quotos";
+import { quoteList } from "./Quotes";
 
 const QuoteWrapper = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const QuoteWrapper = styled.div`
   margin-left: 10px;
 `;
 
-const QuotoBlock = styled.div`
+const QuoteBlock = styled.div`
   width: 85%;
   height: 90px;
   text-align: right;
@@ -43,47 +43,47 @@ const ButtonWrapper = styled.div`
 function DailyInspiration() {
   const [customClick, setCustomClick] = useState(false);
   const [confirmClick, setConfirmClick] = useState(false);
-  const [number, setNumber] = useState(0); //a number indicating which quoto to pick from the quotoList
-  const [quoto, setQuoto] = useState(quotoList[number]);
+  const [number, setNumber] = useState(0); //a number indicating which quote to pick from the quotoList
+  const [quote, setQuote] = useState(quoteList[number]);
 
-  const OnShuffleQuotoClick = () => {
+  const OnShuffleQuoteClick = () => {
     const num = number + 1;
-    setNumber(num % 9); //looping through a list of 10 quotos
-    setQuoto(quotoList[num]);
+    setNumber(num % 9); //looping through a list of 10 Quotes
+    setQuote(quoteList[num]);
   };
 
   const OnCustomClick = () => {
-    setQuoto("");
+    setQuote("");
     setCustomClick(!customClick);
   };
 
   const OnConfirmClick = () => {
     setConfirmClick(!confirmClick);
     setCustomClick(!customClick);
-    if (quoto === "") {
-      setQuoto(quotoList[number]); //set to default if nothing is entered
+    if (quote === "") {
+      setQuote(quoteList[number]); //set to default if nothing is entered
     } else {
-      setQuoto(quoto); //display the input quoto
+      setQuote(quote); //display the input quote
     }
   };
 
-  const handleInput = (e) => setQuoto(e.target.value);
+  const handleInput = (e) => setQuote(e.target.value);
 
   return (
     <QuoteWrapper>
-      <QuotoBlock>
+      <QuoteBlock>
         {customClick ? (
           <Input
-            placeholder="enter your favorite quoto"
+            placeholder="enter your favorite quote"
             onChange={handleInput}
             inputwidth="95%"
           />
         ) : (
-          quoto
+          quote
         )}
-      </QuotoBlock>
+      </QuoteBlock>
       <ButtonWrapper>
-        <Button buttonmargin="5px" onClick={OnShuffleQuotoClick}>
+        <Button buttonmargin="5px" onClick={OnShuffleQuoteClick}>
           Shuffle
         </Button>
         {customClick ? (

@@ -40,7 +40,8 @@ export const RoundButton = styled.button`
   color: white;
   background-color: ${({ color }) => (color ? color : "hotpink")};
   &:hover {
-    ${({ rotate }) => (rotate ? "transform: rotate(180deg)" : null)};
+    ${({ rotate }) =>
+      rotate === "false" ? null : "transform: rotate(180deg)"};
   }
 `;
 

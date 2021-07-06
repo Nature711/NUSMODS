@@ -52,8 +52,8 @@ function CourseList(props) {
   const items = props.items;
   const listItems = items.map((item) => {
     return (
-      <Wrapper>
-        <CourseWrapper key={item.key}>
+      <Wrapper key={item.key}>
+        <CourseWrapper>
           <ListItem>
             <Color>
               <RoundButton color={item.color} width="20px" height="20px" />
@@ -63,7 +63,7 @@ function CourseList(props) {
           <RoundButton
             color="thistle"
             onClick={() => props.onDelete(item.key)}
-            rotate={false}
+            rotate="false"
           >
             -
           </RoundButton>

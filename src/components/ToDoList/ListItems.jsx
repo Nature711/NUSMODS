@@ -37,6 +37,9 @@ const ListItem = styled.div`
     color: #800000;
     font-weight: 900;
   }
+  &:focus {
+    outline: none;
+  }
 `;
 
 function ListItems(props) {
@@ -47,7 +50,7 @@ function ListItems(props) {
         <ListItem>
           <p>{item.text}</p>
         </ListItem>
-        <RoundButton onClick={() => props.onDelete(item.key)} rotate={false}>
+        <RoundButton onClick={() => props.onDelete(item.key)} rotate="false">
           -
         </RoundButton>
       </ItemWrapper>
