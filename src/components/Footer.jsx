@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { LightButton, Input } from "../globalStyles";
 
 const FooterWrapper = styled.footer`
   background: linear-gradient(
@@ -22,15 +21,16 @@ const MainInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 100px;
+  margin: 0 100px 0 100px;
   color: white;
+  font-family: Cambria;
 `;
 
-const ContactInfo = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 100px;
+const Item = styled.p`
+  margin: 0;
+  font-weight: ${({ title }) => (title ? 900 : 100)};
+  color: ${({ title }) => (title ? "blue" : "white")};
+  font-family: ${({ title }) => (title ? "Arial" : "Cambria")};
 `;
 
 function Footer() {
@@ -40,10 +40,11 @@ function Footer() {
         <p>Designed By Nature</p>
         <p>All rights reversed</p>
       </MainInfo>
-      <ContactInfo>
-        <Input placeholder="enter your email address" />
-        <LightButton>{"Subscribe Now"}</LightButton>
-      </ContactInfo>
+      <MainInfo>
+        <Item title="true">Contact Me</Item>
+        <Item>Email: hutianran_tz@163.com</Item>
+        <Item>Telegram: @Nature711</Item>
+      </MainInfo>
     </FooterWrapper>
   );
 }

@@ -1,29 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import { daylineComponent, timelineComponent } from "./DaysAndTimes";
 import Courses from "./Courses";
 import { Button, RoundButton } from "../../globalStyles";
 import CourseList from "./CourseList";
 import ColorPalette from "./ColorPalette";
-
-const TableWrapper = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 30px;
-`;
+import { useAuth } from "../context/AuthContext";
+import { db } from "../../firebase";
 
 const TimeTableWrapper = styled.div`
   width: 80%;
-  height: 100%;
+  height: 650px;
   display: grid;
   grid-template-columns: 5% auto;
   grid-template-rows: 5% auto;
   background-color: #2196f3;
   padding: 10px;
   border-radius: 1em;
+  margin: 20px 0 20px 20px;
 `;
 
 const Component = styled.div`
@@ -35,11 +29,12 @@ const Component = styled.div`
 
 const Functionalities = styled.div`
   width: 20%;
-  height: 100%;
+  height: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 20px;
+  padding: 10px;
+  margin: 20px 20px 20px 0;
 `;
 
 const AddCourse = styled.div`
@@ -99,17 +94,36 @@ function Timetable() {
   const [courseEntered, setCourseEntered] = useState(false); //whether the course is entered when the user is adding course
   const [refresh, setRefresh] = useState(false); //to cause re-render on course button click
   const [timeConfirmed, setTimeConfirmed] = useState(false);
+  const { currentUser } = useAuth();
+  const timetableDataRef = db
+    .collection("UserTimetableData")
+    .doc(currentUser.uid);
 
-  const buttonArray = [];
+  const defaultButtonArray = [];
   for (let i = 0; i < 126; i++) {
-    buttonArray.push({
+    defaultButtonArray.push({
       key: i,
       state: false,
       color: "",
       isUsed: false,
     });
   }
-  const [buttons, setButtons] = useState(buttonArray);
+  const [buttons, setButtons] = useState(defaultButtonArray);
+
+  const getTimetableData = () => {
+    timetableDataRef.get().then((doc) => {
+      const data = doc.data();
+      if (data) {
+        //get data from cloud database
+        setCourseList(data.courseListData ? data.courseListData : []);
+        setButtons(
+          data.buttonArrayData ? data.buttonArrayData : defaultButtonArray
+        );
+      }
+    });
+  };
+
+  useEffect(() => getTimetableData(), []);
 
   const defaultButtonStateArray = Array(126).fill(0);
   const [buttonState, setButtonState] = useState(defaultButtonStateArray);
@@ -121,7 +135,7 @@ function Timetable() {
     } else {
       buttons[key].state = !buttons[key].state;
       buttons[key].color = buttons[key].state ? color : "";
-      buttonState[key] == 0 ? (buttonState[key] = 1) : (buttonState[key] = 0);
+      buttonState[key] === 0 ? (buttonState[key] = 1) : (buttonState[key] = 0);
       setButtonState(buttonState);
       setButtons(buttons);
       setRefresh(!refresh);
@@ -134,7 +148,7 @@ function Timetable() {
       currentCourse.color = color;
       currentCourse.times = [];
       for (let i = 0; i < 126; i++) {
-        if (buttonState[i] == 1) {
+        if (buttonState[i] === 1) {
           currentCourse.times.push(i);
         }
       } //relating course and time
@@ -146,6 +160,9 @@ function Timetable() {
           buttons[i].isUsed = true;
         }
       } //update button state used
+      timetableDataRef.update({ courseListData: newCourses });
+      timetableDataRef.update({ buttonArrayData: buttons });
+      //storing to cloud database
     }
   };
 
@@ -171,12 +188,9 @@ function Timetable() {
     }
     const filteredCourseList = courseList.filter((item) => item.key !== key); //remove the selected course from course list
     setCourseList(filteredCourseList);
-  };
-
-  const handleSetCourse = () => setCourseEntered(true);
-
-  const handleSetColor = (color) => {
-    setColor(color);
+    timetableDataRef.update({ courseListData: filteredCourseList }); //updating cloud database
+    timetableDataRef.update({ buttonArrayData: buttons });
+    //updating cloud database
   };
 
   const canConfirmEnterCourse = currentCourse.mod !== "";
@@ -191,7 +205,7 @@ function Timetable() {
   const showAddCourseButton = !adding || (adding && timeConfirmed);
 
   return (
-    <TableWrapper>
+    <>
       <TimeTableWrapper>
         <Component></Component>
         <Component>{timelineComponent}</Component>
@@ -221,7 +235,11 @@ function Timetable() {
                   </Button>
                 ) : (
                   <PaletteWrapper>
-                    <ColorPalette onClick={handleSetColor} />
+                    <ColorPalette
+                      onClick={(color) => {
+                        setColor(color);
+                      }}
+                    />
                     <Tip>
                       choose a color for timeslot display and then select the
                       timeslot in the table
@@ -236,7 +254,7 @@ function Timetable() {
                     onChange={handleInput}
                   />
                   <RoundButton
-                    onClick={handleSetCourse}
+                    onClick={() => setCourseEntered(true)}
                     color="lightblue"
                     rotate="false"
                     disabled={!canConfirmEnterCourse}
@@ -254,7 +272,7 @@ function Timetable() {
           )}
         </AddCourse>
       </Functionalities>
-    </TableWrapper>
+    </>
   );
 }
 

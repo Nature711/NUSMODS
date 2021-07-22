@@ -25,7 +25,7 @@ const ListItem = styled.div`
   color: white;
   background-color: #ffa07a;
   margin: 10px;
-  width: 250px;
+  width: 230px;
   height: 40px;
   border-radius: 5px;
   text-align: center;
@@ -42,15 +42,24 @@ const ListItem = styled.div`
   }
 `;
 
-function ListItems(props) {
-  const items = props.items;
-  const listItems = items.map((item) => {
+function List(props) {
+  const listItems = props.list.map((item) => {
     return (
       <ItemWrapper key={item.key}>
-        <ListItem>
-          <p>{item.text}</p>
-        </ListItem>
-        <RoundButton onClick={() => props.onDelete(item.key)} rotate="false">
+        {props.isTaskList ? (
+          <ListItem>
+            <p>{item.text}</p>
+          </ListItem>
+        ) : (
+          <ListItem onClick={() => window.open(item.url, "_blank")}>
+            <p>{item.name}</p>
+          </ListItem>
+        )}
+        <RoundButton
+          onClick={() => props.onDelete(item.key)}
+          rotate="false"
+          color="skyblue"
+        >
           -
         </RoundButton>
       </ItemWrapper>
@@ -60,4 +69,4 @@ function ListItems(props) {
   return <ListContainer>{listItems}</ListContainer>;
 }
 
-export default ListItems;
+export default List;

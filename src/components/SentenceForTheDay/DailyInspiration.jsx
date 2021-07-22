@@ -3,15 +3,6 @@ import styled from "styled-components/macro";
 import { Button, Input } from "../../globalStyles";
 import { quoteList } from "./Quotes";
 
-const QuoteWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  justify-content: space-between;
-  margin-right: 10px;
-  margin-left: 10px;
-`;
-
 const QuoteBlock = styled.div`
   width: 85%;
   height: 90px;
@@ -20,6 +11,7 @@ const QuoteBlock = styled.div`
   padding-left: 55px;
   padding-right: 20px;
   padding-top: 10px;
+  margin-left: 10px;
   color: #555555;
   border-bottom: 8px solid #78c0a8;
   border-radius: 0.2em;
@@ -38,6 +30,7 @@ const QuoteBlock = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-right: 10px;
 `;
 
 function DailyInspiration() {
@@ -70,7 +63,7 @@ function DailyInspiration() {
   const handleInput = (e) => setQuote(e.target.value);
 
   return (
-    <QuoteWrapper>
+    <>
       <QuoteBlock>
         {customClick ? (
           <Input
@@ -96,7 +89,7 @@ function DailyInspiration() {
           </Button>
         )}
       </ButtonWrapper>
-    </QuoteWrapper>
+    </>
   );
 }
 
